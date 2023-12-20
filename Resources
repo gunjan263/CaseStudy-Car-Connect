@@ -1,0 +1,78 @@
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    Address VARCHAR(255),
+    Username VARCHAR(50) UNIQUE,
+    Password VARCHAR(100),
+    RegistrationDate DATE
+);
+
+CREATE TABLE Vehicle (
+    VehicleID INT PRIMARY KEY,
+    Model VARCHAR(50),
+    Make VARCHAR(50),
+    Year INT,
+    Color VARCHAR(50),
+    RegistrationNumber VARCHAR(20) UNIQUE,
+    Availability BOOLEAN,
+    DailyRate DECIMAL(10, 2)
+);
+
+CREATE TABLE Reservation (
+    ReservationID INT PRIMARY KEY,
+    CustomerID INT,
+    VehicleID INT,
+    StartDate DATETIME,
+    EndDate DATETIME,
+    TotalCost DECIMAL(10, 2),
+    Status VARCHAR(20),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (VehicleID) REFERENCES Vehicle(VehicleID)
+);
+
+CREATE TABLE Admin (
+    AdminID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    Username VARCHAR(50) UNIQUE,
+    Password VARCHAR(100),
+    Role VARCHAR(50),
+    JoinDate DATE
+);
+
+
+
+
+
+
+-- Inserting sample Indian customer data
+INSERT INTO Customer (CustomerId,FirstName, LastName, Email, PhoneNumber, Address, Username, Password, RegistrationDate)
+VALUES
+    (1,'Aarav', 'Kumar', 'aarav@example.com', '+91-9876543210', '123, Delhi Street, New Delhi', 'aaravk', 'password123', '2023-01-15'),
+    (2,'Riya', 'Sharma', 'riya@example.com', '+91-8765432109', '456, Mumbai Road, Mumbai', 'riyash', 'securepwd', '2023-02-20'),
+    (3,'Vijay', 'Singh', 'vijay@example.com', '+91-7654321098', '789, Bangalore Lane, Bangalore', 'vijays', 'pass@123', '2023-03-25');
+
+-- Inserting sample vehicle data
+INSERT INTO Vehicle (VehicleID, Make, Year, Color, RegistrationNumber, Availability, DailyRate)
+VALUES
+    (1, 'Honda', 2022, 'Red', 'KA01AB1234', true, 2500.00),
+    (2, 'Maruti Suzuki', 2021, 'Blue', 'DL05CD5678', true, 1800.00),
+    (3, 'Hyundai', 2023, 'White', 'MH02EF9876', true, 3000.00);
+
+-- Inserting sample Reservation data
+INSERT INTO Reservation (ReservationId, CustomerID, VehicleID, StartDate, EndDate, TotalCost, Status)
+VALUES
+    (1, 1, 1, '2023-04-01 10:00:00', '2023-04-05 10:00:00', 10000.00, 'confirmed'),
+    (2, 2, 2, '2023-04-10 09:00:00', '2023-04-12 09:00:00', 3600.00, 'pending'),
+    (3, 3, 3, '2023-04-15 08:00:00', '2023-04-18 08:00:00', 9000.00, 'confirmed');
+
+-- Inserting sample admin data
+INSERT INTO Admin (AdminId,FirstName, LastName, Email, PhoneNumber, Username, Password, Role, JoinDate)
+VALUES
+    (1, 'Rajesh', 'Kumar', 'rajesh@example.com', '+91-9876543210', 'rajesh1', 'rajesh123', 'Super Admin', '2022-12-01'),
+    (2, 'Priya', 'Sharma', 'priya@example.com', '+91-8765432109', 'priya2', 'priya123', 'Fleet Manager', '2023-01-10');
