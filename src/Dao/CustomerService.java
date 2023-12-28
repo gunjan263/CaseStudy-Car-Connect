@@ -4,6 +4,7 @@ package Dao;
 import Entity.Customer;
 import Exception.AuthenticationException;
 import Exception.DatabaseConnectionException;
+import Util.DBConnUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,13 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CustomerService implements ICustomerService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CarRentalDatabase";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Gunjan@2001";
 
     @Override
     public Customer getCustomerById(int customerId) throws AuthenticationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Customer WHERE CustomerID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, customerId);
@@ -37,7 +35,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Customer getCustomerByUsername(String username) throws AuthenticationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Customer WHERE Username = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, username);
@@ -75,7 +73,7 @@ public class CustomerService implements ICustomerService {
     }
 
     public void registerCustomer(Customer customerData) throws DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "INSERT INTO Customer (FirstName, LastName, Email, PhoneNumber, Address, Username, Password, RegistrationDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, customerData.getFirstName());
@@ -96,7 +94,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void updateCustomer(Customer customerData) throws AuthenticationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "UPDATE Customer SET FirstName = ?, LastName = ?, Email = ?, PhoneNumber = ?, Address = ?, Username = ?, Password = ?, RegistrationDate = ? WHERE CustomerID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, customerData.getFirstName());
@@ -123,7 +121,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void deleteCustomer(int customerId) throws AuthenticationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "DELETE FROM Customer WHERE CustomerID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, customerId);

@@ -3,20 +3,18 @@ package Dao;
 import Entity.Reservation;
 import Exception.DatabaseConnectionException;
 import Exception.ReservationException;
+import Util.DBConnUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReservationService implements IReservationService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CarRentalDatabase";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Gunjan@2001";
 
+public class ReservationService implements IReservationService {
     @Override
     public Reservation getReservationById(int reservationId) throws ReservationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Reservation WHERE ReservationID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, reservationId);
@@ -36,7 +34,7 @@ public class ReservationService implements IReservationService {
     @Override
     public List<Reservation> getReservationsByCustomerId(int customerId) throws DatabaseConnectionException {
         List<Reservation> customerReservations = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Reservation WHERE CustomerID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, customerId);
@@ -67,7 +65,7 @@ public class ReservationService implements IReservationService {
     }
 
     public void createReservation(Reservation reservationData) throws DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             // Check for existing reservations within the specified time slot
             if (isReservationSlotAvailable(connection, reservationData.getVehicleID(), reservationData.getStartDate(), reservationData.getEndDate())) {
                 // If the time slot is available, proceed to create the reservation
@@ -121,7 +119,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public void updateReservation(Reservation reservationData) throws ReservationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "UPDATE Reservation SET CustomerID = ?, VehicleID = ?, StartDate = ?, EndDate = ?, TotalCost = ?, Status = ? WHERE ReservationID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, reservationData.getCustomerID());
@@ -143,7 +141,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public void cancelReservation(int reservationId) throws ReservationException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "DELETE FROM Reservation WHERE ReservationID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, reservationId);
@@ -160,7 +158,7 @@ public class ReservationService implements IReservationService {
     public static double calculateCost() throws DatabaseConnectionException {
         double totalSum = 0.0;
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String query = "SELECT TotalCost FROM Reservation";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 try (ResultSet resultSet = statement.executeQuery()) {

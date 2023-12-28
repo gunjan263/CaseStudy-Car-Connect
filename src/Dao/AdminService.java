@@ -3,6 +3,7 @@ package Dao;
 import Entity.Admin;
 import Exception.AdminNotFoundException;
 import Exception.DatabaseConnectionException;
+import Util.DBConnUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,13 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminService implements IAdminService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CarRentalDatabase";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Gunjan@2001";
 
     @Override
     public Admin getAdminById(int adminId) throws AdminNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Admin WHERE AdminID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, adminId);
@@ -36,7 +34,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public Admin getAdminByUsername(String username) throws AdminNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Admin WHERE Username = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, username);
@@ -55,7 +53,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public void registerAdmin(Admin adminData) throws DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "INSERT INTO Admin (FirstName, LastName, Email, PhoneNumber, Username, Password, Role, JoinDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, adminData.getFirstName());
@@ -75,7 +73,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public void updateAdmin(Admin adminData) throws AdminNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "UPDATE Admin SET FirstName = ?, LastName = ?, Email = ?, PhoneNumber = ?, Username = ?, Password = ?, Role = ?, JoinDate = ? WHERE AdminID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, adminData.getFirstName());
@@ -99,7 +97,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public void deleteAdmin(int adminId) throws AdminNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "DELETE FROM Admin WHERE AdminID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, adminId);

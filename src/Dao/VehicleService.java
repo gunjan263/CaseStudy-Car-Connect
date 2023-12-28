@@ -4,6 +4,7 @@ package Dao;
 import Entity.Vehicle;
 import Exception.DatabaseConnectionException;
 import Exception.VehicleNotFoundException;
+import Util.DBConnUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,13 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleService implements IVehicleService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CarRentalDatabase";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Gunjan@2001";
-
     @Override
     public Vehicle getVehicleById(int vehicleId) throws VehicleNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Vehicle WHERE VehicleID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, vehicleId);
@@ -40,7 +37,7 @@ public class VehicleService implements IVehicleService {
     @Override
     public List<Vehicle> getAvailableVehicles() throws DatabaseConnectionException {
         List<Vehicle> availableVehicles = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Vehicle WHERE Availability = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setBoolean(1, true);
@@ -59,7 +56,7 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public void addVehicle(Vehicle vehicleData) throws DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "INSERT INTO Vehicle (Model, Make, Year, Color, RegistrationNumber, Availability, DailyRate) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, vehicleData.getModel());
@@ -85,7 +82,7 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public void updateVehicle(Vehicle vehicleData) throws VehicleNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "UPDATE Vehicle SET Model = ?, Make = ?, Year = ?, Color = ?, RegistrationNumber = ?, Availability = ?, DailyRate = ? WHERE VehicleID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, vehicleData.getModel());
@@ -111,7 +108,7 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public void removeVehicle(int vehicleId) throws VehicleNotFoundException, DatabaseConnectionException {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "DELETE FROM Vehicle WHERE VehicleID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, vehicleId);
@@ -139,28 +136,5 @@ public class VehicleService implements IVehicleService {
                 resultSet.getDouble("DailyRate")
         );
     }
-
-    public int getVehicleIdByRegistrationNumber(String registrationNumber) {
-        int vehicleId = -1; // Default value if ID is not found or an error occurs
-
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT VehicleID FROM Vehicles WHERE RegistrationNumber = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, registrationNumber);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        vehicleId = resultSet.getInt("VehicleID");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            // Handle the exception appropriately
-            e.printStackTrace();
-        }
-
-        return vehicleId;
-    }
-
-    // Additional CRUD methods for vehicles can be implemented here
-    // ...
+    
 }
