@@ -54,9 +54,6 @@ public class CustomerService implements ICustomerService {
         }
     }
 
-    // Implement other methods for RegisterCustomer, UpdateCustomer, DeleteCustomer, etc.
-    // ...
-
     private Customer extractCustomerFromResultSet(ResultSet resultSet) throws SQLException {
         // Extracts customer data from the ResultSet and creates a Customer object
         return new Customer(

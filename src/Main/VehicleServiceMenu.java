@@ -119,8 +119,6 @@ public class VehicleServiceMenu {
             // Create a new Vehicle object
             Vehicle newVehicle = new Vehicle(0, model, make, year, color, registrationNumber, availability, dailyRate);
 
-            // Perform the addition operation
-            // vehicleService.addVehicle(newVehicle); // Uncomment this line once you have implemented the addVehicle method
             System.out.println("Vehicle added successfully.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid input format. Please enter a valid number.");
@@ -157,12 +155,14 @@ public class VehicleServiceMenu {
         try {
             System.out.println("Enter Vehicle ID to remove:");
             int vehicleId = Integer.parseInt(scanner.nextLine());
-
-            // Remove the vehicle based on the provided ID
-            // vehicleService.removeVehicle(vehicleId); // Uncomment this line once you have implemented the removeVehicle method
+            vehicleService.removeVehicle(vehicleId);
             System.out.println("Vehicle removed successfully.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid input format. Please enter a valid number.");
+        } catch (VehicleNotFoundException | DatabaseConnectionException e) {
+            System.out.println("Error occurred while removing the vehicle: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Unexpected error occurred: " + e.getMessage());
         }
     }
 

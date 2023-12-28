@@ -136,5 +136,5 @@ public class VehicleService implements IVehicleService {
                 resultSet.getDouble("DailyRate")
         );
     }
-    
+
 }
