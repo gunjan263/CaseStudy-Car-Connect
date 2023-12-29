@@ -88,6 +88,8 @@ public class Reservation {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    //Debugging information
     @Override
     public String toString() {
         return "Reservation{" +

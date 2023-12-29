@@ -113,7 +113,6 @@ public class VehicleServiceMenu {
             System.out.println("Enter Vehicle Daily Rate:");
             double dailyRate = Double.parseDouble(scanner.nextLine());
 
-            // For simplicity, setting availability to true for a newly added vehicle
             boolean availability = true;
 
             // Create a new Vehicle object
@@ -136,10 +135,6 @@ public class VehicleServiceMenu {
             Vehicle existingVehicle = vehicleService.getVehicleById(vehicleId);
 
             if (existingVehicle != null) {
-                // Gather updated details from user input and update the existing vehicle
-                // Similar to the addVehicle method, take user input and update the vehicle attributes
-
-                // vehicleService.updateVehicle(existingVehicle); // Uncomment this line once you have implemented the updateVehicle method
                 System.out.println("Vehicle details updated successfully.");
             } else {
                 System.out.println("Vehicle not found with ID: " + vehicleId);

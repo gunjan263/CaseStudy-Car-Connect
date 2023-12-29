@@ -25,7 +25,6 @@ public class VehicleServiceTest {
     public void testAddVehicle() {
         try {
             Vehicle newVehicle = new Vehicle(); // Create a new Vehicle object
-            // Set necessary details for the new vehicle
             newVehicle.setModel("Model XYZ");
             newVehicle.setMake("Tesla");
             newVehicle.setYear(2023);
@@ -35,7 +34,7 @@ public class VehicleServiceTest {
             newVehicle.setDailyRate(50.0);
 
             vehicleService.addVehicle(newVehicle);
-            // Assuming addVehicle doesn't throw an exception on success, no need for assertions
+
         } catch (DatabaseConnectionException e) {
             fail("Exception not expected: " + e.getMessage());
         }
@@ -44,24 +43,22 @@ public class VehicleServiceTest {
     @Test
     public void testUpdateVehicle() {
         try {
-            // Get an existing vehicle and update its details
-            int existingVehicleId = 3; // Replace with an existing vehicle ID
+
+            int existingVehicleId = 3;
             Vehicle existingVehicle = vehicleService.getVehicleById(existingVehicleId);
 
-            // Update details of the existing vehicle
             existingVehicle.setModel("Hundai ");
             existingVehicle.setMake("Mahindra");
-            // Set other updated details
 
             vehicleService.updateVehicle(existingVehicle);
-            // Assuming updateVehicle doesn't throw an exception on success, no need for assertions
+
         } catch (VehicleNotFoundException | DatabaseConnectionException e) {
             fail("Exception not expected: " + e.getMessage());
         }
     }
 
     @Test
-    public void testGetAllVehicles() throws DatabaseConnectionException {
+    public void testGetAllVehicles() {
 
         VehicleService vehicleService = new VehicleService();
 

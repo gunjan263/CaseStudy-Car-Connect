@@ -118,10 +118,8 @@ public class ReservationServiceMenu {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    private static Date convertToDate(LocalDate localDate) {
-        return java.sql.Date.valueOf(localDate);
-    }
-    public class DateConverter {
+
+    public static class DateConverter {
         public static Date convertToDate(LocalDate localDate) {
             return java.sql.Date.valueOf(localDate);
         }

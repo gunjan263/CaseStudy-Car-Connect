@@ -1,7 +1,8 @@
 package Main;
 
+import Util.DBConnUtil;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,16 +17,11 @@ import java.util.HashMap;
 
 public class ReportGenerator {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CarRentalDatabase";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Gunjan@2001";
 
-    // Other methods and DB connection details...
 
     public void generateComprehensiveReport() {
         System.out.println("=== Comprehensive Report ===");
 
-        // Generate and display the reservation history report
         reservationHistoryReport();
 
         // Ask the user to input the start date for the vehicle utilization report
@@ -35,12 +31,10 @@ public class ReportGenerator {
 
         // Generate and display the revenue report
         revenueCalculatorReport();
-
-        // Other reports or data can be included here as needed
     }
 
     public void reservationHistoryReport() {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "SELECT * FROM Reservation";
 
             try (PreparedStatement statement = connection.prepareStatement(sql);
@@ -59,7 +53,6 @@ public class ReportGenerator {
                     System.out.println("Reservation ID: " + reservationID);
                     System.out.println("Customer ID: " + customerID);
                     System.out.println("Vehicle ID: " + vehicleID);
-                    // Display other relevant details
                 }
             }
         } catch (SQLException e) {
@@ -68,7 +61,7 @@ public class ReportGenerator {
     }
 
     public void vehicleUtilizationCalculatorReport(String startDateStr) {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date startDate = dateFormat.parse(startDateStr);
             Date currentDate = new Date(); // Get current date and time
@@ -94,14 +87,11 @@ public class ReportGenerator {
                     }
                 }
             }
-
-            // Calculate and display the total usage time for each vehicle
             System.out.println("Vehicle Utilization Report:");
             for (Map.Entry<Integer, Long> entry : vehicleUsageMap.entrySet()) {
                 int vehicleID = entry.getKey();
                 long totalUsageTime = entry.getValue();
 
-                // Calculate hours, minutes, and seconds from total milliseconds
                 long hours = TimeUnit.MILLISECONDS.toHours(totalUsageTime);
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(totalUsageTime - TimeUnit.HOURS.toMillis(hours));
                 long seconds = TimeUnit.MILLISECONDS.toSeconds(totalUsageTime - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes));
@@ -114,7 +104,7 @@ public class ReportGenerator {
     }
 
     public void revenueCalculatorReport() {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        try (Connection connection = DBConnUtil.getConnection()) {
             // Calculate total revenue
             double totalRevenue = calculateTotalRevenueFromDB(connection);
 
@@ -142,6 +132,4 @@ public class ReportGenerator {
 
         return totalRevenue;
     }
-
-    // Other methods...
 }

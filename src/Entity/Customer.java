@@ -103,6 +103,8 @@ public class Customer {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    //Debugging Information
     @Override
     public String toString() {
         return "Customer{" +
