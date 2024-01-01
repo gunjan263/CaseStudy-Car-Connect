@@ -1,6 +1,7 @@
 package Main;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 import Dao.AdminService;
@@ -141,15 +142,37 @@ public class AdminServiceMenu {
             String newPhoneNumber = scanner.nextLine();
             existingAdmin.setPhoneNumber(newPhoneNumber);
 
+            System.out.println("Enter new username: ");
+            String newUsername = scanner.nextLine();
+            existingAdmin.setUsername(newUsername);
+
+            System.out.println("Enter new password: ");
+            String newPassword = scanner.nextLine();
+            existingAdmin.setPassword(newPassword);
+
+            System.out.println("Enter new role: ");
+            String newRole = scanner.nextLine();
+            existingAdmin.setRole(newRole);
+
+            System.out.println("Enter new join date (YYYY-MM-DD): ");
+            String newJoinDateStr = scanner.nextLine();
+            LocalDate newJoinDate = LocalDate.parse(newJoinDateStr);
+
+            // Convert LocalDate to Date
+            Date convertedJoinDate = java.sql.Date.valueOf(newJoinDate);
+
+            existingAdmin.setJoinDate(convertedJoinDate);
+
             // Update admin details
             adminService.updateAdmin(existingAdmin);
             System.out.println("Admin updated successfully!");
-        } catch (AdminNotFoundException | DatabaseConnectionException e) {
+        } catch (AdminNotFoundException | DatabaseConnectionException | DateTimeParseException e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
             scanner.close();
         }
     }
+
 
 
     private static void deleteAdmin() {

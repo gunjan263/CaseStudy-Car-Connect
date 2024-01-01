@@ -105,10 +105,37 @@ public class CustomerServiceMenu {
                 System.out.println("Enter Customer Email:");
                 String email = scanner.nextLine();
 
-                // Update customer details
+                System.out.println("Enter Customer Phone Number:");
+                String phoneNumber = scanner.nextLine();
+
+                System.out.println("Enter Customer Address:");
+                String address = scanner.nextLine();
+
+                System.out.println("Enter Customer Username:");
+                String username = scanner.nextLine();
+
+                System.out.println("Enter Customer Password:");
+                String password = scanner.nextLine();
+
+                System.out.println("Enter Customer Registration Date (YYYY-MM-DD):");
+                String registrationDateStr = scanner.nextLine();
+
+                // Set all the retrieved values to the existing customer
                 existingCustomer.setFirstName(firstName);
                 existingCustomer.setLastName(lastName);
                 existingCustomer.setEmail(email);
+                existingCustomer.setPhoneNumber(phoneNumber);
+                existingCustomer.setAddress(address);
+                existingCustomer.setUsername(username);
+                existingCustomer.setPassword(password);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date registrationDate = dateFormat.parse(registrationDateStr);
+                    existingCustomer.setRegistrationDate(registrationDate);
+                } catch (ParseException e) {
+                    System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                }
 
                 customerService.updateCustomer(existingCustomer);
                 System.out.println("Customer details updated successfully!");
@@ -121,6 +148,7 @@ public class CustomerServiceMenu {
             throw new RuntimeException(e);
         }
     }
+
 
     private static void getCustomerById(Scanner scanner) {
         System.out.println("Enter Customer ID:");

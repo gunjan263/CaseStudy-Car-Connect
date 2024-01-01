@@ -5,9 +5,7 @@ import Entity.Customer;
 import Exception.AuthenticationException;
 import Exception.DatabaseConnectionException;
 import Util.DBConnUtil;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

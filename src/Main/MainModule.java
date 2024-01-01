@@ -2,10 +2,35 @@ package Main;
 import java.util.Scanner;
 
 public class MainModule {
+
+    private static boolean isAuthenticated = false;
+    private static String currentUserType = "";
     public static void main(String[] args) {
         String username_g = "";
         Scanner scanner = new Scanner(System.in);
 
+        while (true) {
+            if (!isAuthenticated) {
+                authenticateUser(scanner);
+            } else {
+                if (currentUserType.equals("Customer")) {
+                    customerAccessMenu(scanner);
+                } else if (currentUserType.equals("Admin")) {
+                    adminAccessMenu(scanner);
+                }
+            }
+
+            System.out.println("Do you want to exit? (yes/no)");
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("yes")) {
+                break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void authenticateUser(Scanner scanner) {
         System.out.println("Are you a Customer or an Admin?");
         System.out.println("1. Customer");
         System.out.println("2. Admin");
@@ -20,7 +45,7 @@ public class MainModule {
             case 1:
                 isAuthenticated = authenticateCustomer(scanner, authHandler);
                 if (isAuthenticated) {
-                    customerAccessMenu(scanner);
+                    currentUserType = "Customer";
                 } else {
                     System.out.println("Access denied for the customer.");
                 }
@@ -28,7 +53,7 @@ public class MainModule {
             case 2:
                 isAuthenticated = authenticateAdmin(scanner, authHandler);
                 if (isAuthenticated) {
-                    adminAccessMenu(scanner);
+                    currentUserType = "Admin";
                 } else {
                     System.out.println("Access denied for the admin.");
                 }
@@ -37,7 +62,7 @@ public class MainModule {
                 System.out.println("Invalid choice!");
         }
 
-        scanner.close();
+        MainModule.isAuthenticated = isAuthenticated;
     }
     private static boolean authenticateCustomer(Scanner scanner, AuthenticationHandler authHandler) {
         System.out.println("Customer Login");
@@ -64,8 +89,7 @@ public class MainModule {
                 }
             }
         }
-
-        return isAuthenticated;
+        return isAuthenticated; // Return the authentication status outside the loop
     }
 
     private static boolean authenticateAdmin(Scanner scanner, AuthenticationHandler authHandler) {
@@ -101,21 +125,19 @@ public class MainModule {
 
     private static void customerAccessMenu(Scanner scanner) {
         System.out.println("Customer Access Menu:");
-        System.out.println("1. Customer Service");
-        System.out.println("2. Vehicle Service");
-        System.out.println("3. Reservation Service");
+        System.out.println("1. Vehicle Service");
+        System.out.println("2. Reservation Service");
         System.out.println("Enter your choice:");
+
+
 
         int choice = Integer.parseInt(scanner.nextLine());
 
         switch (choice) {
             case 1:
-                CustomerServiceMenu.showCustomerServiceMenu(scanner);
+                VehicleServiceMenu.showVehicleServiceMenu(scanner, true);
                 break;
             case 2:
-                VehicleServiceMenu.showVehicleServiceMenu(scanner);
-                break;
-            case 3:
                 ReservationServiceMenu.showReservationServiceMenu(scanner);
                 break;
             default:
@@ -139,7 +161,7 @@ public class MainModule {
                 CustomerServiceMenu.showCustomerServiceMenu(scanner);
                 break;
             case 2:
-                VehicleServiceMenu.showVehicleServiceMenu(scanner);
+                VehicleServiceMenu.showVehicleServiceMenu(scanner, false);
                 break;
             case 3:
                 ReservationServiceMenu.showReservationServiceMenu(scanner);

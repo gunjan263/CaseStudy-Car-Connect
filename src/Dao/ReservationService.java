@@ -4,7 +4,6 @@ import Entity.Reservation;
 import Exception.DatabaseConnectionException;
 import Exception.ReservationException;
 import Util.DBConnUtil;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +77,9 @@ public class ReservationService implements IReservationService {
                     statement.setDouble(5, reservationData.getTotalCost());
                     statement.setString(6, reservationData.getStatus());
                     statement.executeUpdate();
+
+                    // Update vehicle availability in the Vehicle table after creating the reservation
+                    updateVehicleAvailability(connection, reservationData.getVehicleID(), false);
                 }
             } else {
                 System.out.println("Another reservation already exists for this time slot. Please choose a different time slot or date.");
@@ -86,6 +88,17 @@ public class ReservationService implements IReservationService {
             throw new DatabaseConnectionException("Error connecting to the database: " + e.getMessage());
         }
     }
+
+    // Method to update vehicle availability in the Vehicle table
+    private void updateVehicleAvailability(Connection connection, int vehicleID, boolean availability) throws SQLException {
+        String updateSql = "UPDATE Vehicle SET Availability = ? WHERE VehicleID = ?";
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+            updateStatement.setBoolean(1, availability);
+            updateStatement.setInt(2, vehicleID);
+            updateStatement.executeUpdate();
+        }
+    }
+
 
     private boolean isReservationSlotAvailable(Connection connection, int vehicleID, java.util.Date startDate, java.util.Date endDate) throws SQLException {
         String sql = "SELECT * FROM Reservation WHERE VehicleID = ? AND ((StartDate <= ? AND EndDate >= ?) OR (StartDate <= ? AND EndDate >= ?))";
@@ -101,22 +114,6 @@ public class ReservationService implements IReservationService {
         }
     }
 
-
-    private boolean isReservationSlotAvailable(Connection connection, int vehicleID, Date startDate, Date endDate) throws SQLException {
-        String sql = "SELECT * FROM Reservation WHERE VehicleID = ? AND ((StartDate <= ? AND EndDate >= ?) OR (StartDate <= ? AND EndDate >= ?))";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, vehicleID);
-            statement.setTimestamp(2, new Timestamp(startDate.getTime()));
-            statement.setTimestamp(3, new Timestamp(startDate.getTime()));
-            statement.setTimestamp(4, new Timestamp(endDate.getTime()));
-            statement.setTimestamp(5, new Timestamp(endDate.getTime()));
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return !resultSet.next(); // If no overlapping reservation found, the slot is available
-            }
-        }
-    }
-
-
     @Override
     public void updateReservation(Reservation reservationData) throws ReservationException, DatabaseConnectionException {
         try (Connection connection = DBConnUtil.getConnection()) {
@@ -130,8 +127,14 @@ public class ReservationService implements IReservationService {
                 statement.setString(6, reservationData.getStatus());
                 statement.setInt(7, reservationData.getReservationID());
                 int rowsUpdated = statement.executeUpdate();
+
                 if (rowsUpdated == 0) {
                     throw new ReservationException("Reservation with ID " + reservationData.getReservationID() + " not found.");
+                } else {
+                    // Retrieve the previous reservation data
+                    Reservation oldReservation = getReservationById(reservationData.getReservationID());
+                    // Update the availability of the vehicle based on changes in reservation dates
+                    updateVehicleAvailability(connection, oldReservation, reservationData);
                 }
             }
         } catch (SQLException e) {
@@ -139,8 +142,25 @@ public class ReservationService implements IReservationService {
         }
     }
 
+    // Method to update vehicle availability in the Vehicle table based on reservation changes
+    private void updateVehicleAvailability(Connection connection, Reservation oldReservation, Reservation updatedReservation) throws SQLException {
+        // If the updated reservation dates differ from the previous reservation dates, adjust vehicle availability
+        if (!oldReservation.getStartDate().equals(updatedReservation.getStartDate()) || !oldReservation.getEndDate().equals(updatedReservation.getEndDate())) {
+            int vehicleID = oldReservation.getVehicleID();
+            boolean availability = isReservationSlotAvailable(connection, vehicleID, updatedReservation.getStartDate(), updatedReservation.getEndDate()); // Set availability to true initially
+
+            // Check for overlapping reservations
+            // Set availability to false if overlapping reservation found
+
+
+            updateVehicleAvailability(connection, vehicleID, availability);
+        }
+    }
+
+
     @Override
     public void cancelReservation(int reservationId) throws ReservationException, DatabaseConnectionException {
+        Reservation cancelledReservation = getReservationById(reservationId); // Retrieve reservation data before deletion
         try (Connection connection = DBConnUtil.getConnection()) {
             String sql = "DELETE FROM Reservation WHERE ReservationID = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -148,11 +168,21 @@ public class ReservationService implements IReservationService {
                 int rowsDeleted = statement.executeUpdate();
                 if (rowsDeleted == 0) {
                     throw new ReservationException("Reservation with ID " + reservationId + " not found.");
+                } else {
+                    updateVehicleAvailabilityAfterCancellation(connection, cancelledReservation);
                 }
             }
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Error connecting to the database: " + e.getMessage());
         }
+    }
+
+    // Method to update vehicle availability after cancelling a reservation
+    private void updateVehicleAvailabilityAfterCancellation(Connection connection, Reservation cancelledReservation) throws SQLException {
+
+        int vehicleID = cancelledReservation.getVehicleID();
+        boolean availability = isReservationSlotAvailable(connection, vehicleID, cancelledReservation.getStartDate(), cancelledReservation.getEndDate()); // Set availability to true initially
+        updateVehicleAvailability(connection, vehicleID, availability);
     }
 
     public static double calculateCost() throws DatabaseConnectionException {

@@ -136,5 +136,21 @@ public class VehicleService implements IVehicleService {
                 resultSet.getDouble("DailyRate")
         );
     }
-
+    public List<Vehicle> getAllVehicles() throws DatabaseConnectionException {
+        List<Vehicle> allVehicles = new ArrayList<>();
+        try (Connection connection = DBConnUtil.getConnection()) {
+            String sql = "SELECT * FROM Vehicle";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Vehicle vehicle = extractVehicleFromResultSet(resultSet);
+                        allVehicles.add(vehicle);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Error connecting to the database: " + e.getMessage());
+        }
+        return allVehicles;
+    }
 }

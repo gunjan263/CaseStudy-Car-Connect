@@ -4,7 +4,6 @@ import Dao.VehicleService;
 import Entity.Vehicle;
 import Exception.DatabaseConnectionException;
 import Exception.VehicleNotFoundException;
-import Main.VehicleServiceMenu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ public class VehicleServiceTest {
             newVehicle.setMake("Tesla");
             newVehicle.setYear(2023);
             newVehicle.setColor("Blue");
-            newVehicle.setRegistrationNumber("ABC123");
+            newVehicle.setRegistrationNumber("ABC1234");
             newVehicle.setAvailable(true);
             newVehicle.setDailyRate(50.0);
 
@@ -44,11 +43,18 @@ public class VehicleServiceTest {
     public void testUpdateVehicle() {
         try {
 
-            int existingVehicleId = 3;
+            int existingVehicleId = 4;
             Vehicle existingVehicle = vehicleService.getVehicleById(existingVehicleId);
 
-            existingVehicle.setModel("Hundai ");
-            existingVehicle.setMake("Mahindra");
+            existingVehicle.setModel("Model Y");
+            existingVehicle.setMake("Tesla");
+            existingVehicle.setYear(2023);
+            existingVehicle.setColor("Matte Black");
+            existingVehicle.setRegistrationNumber("ABC123");
+            existingVehicle.setAvailable(false);
+            existingVehicle.setDailyRate(25000);
+
+
 
             vehicleService.updateVehicle(existingVehicle);
 
@@ -58,10 +64,50 @@ public class VehicleServiceTest {
     }
 
     @Test
-    public void testGetAllVehicles() {
+    public void testToGetAllVehicle() {
+        try {
+            // Retrieve all vehicles
+            List<Vehicle> vehicles = vehicleService.getAllVehicles();
 
-        VehicleService vehicleService = new VehicleService();
+            // Assertions:
+            assertNotNull(vehicles);
+            assertFalse(vehicles.isEmpty());
+            assertTrue(!vehicles.isEmpty());
+            Vehicle firstVehicle = vehicles.get(0);
+            assertNotNull(firstVehicle.getMake());
+            assertNotNull(firstVehicle.getModel());
+            assertNotNull(firstVehicle.getYear());
+            assertNotNull(firstVehicle.getColor());
+            assertNotNull(firstVehicle.getRegistrationNumber());
+            assertNotNull(firstVehicle.isAvailable());
+            assertNotNull(firstVehicle.getDailyRate());
 
-        List<Vehicle> allVehicles = VehicleServiceMenu.getAvailableVehiclesn();
+        } catch (Exception e) {
+            fail("Exception thrown: " + e.getMessage()); // Fail the test if an exception occurs
+        }
+    }
+
+    @Test
+    public void testToGetAvailableVehicle() {
+        try {
+            // Retrieve all vehicles
+            List<Vehicle> vehicles = vehicleService.getAvailableVehicles();
+
+            // Assertions:
+            assertNotNull(vehicles);
+            assertFalse(vehicles.isEmpty());
+            assertTrue(!vehicles.isEmpty());
+            Vehicle firstVehicle = vehicles.get(0);
+            assertNotNull(firstVehicle.getMake());
+            assertNotNull(firstVehicle.getModel());
+            assertNotNull(firstVehicle.getYear());
+            assertNotNull(firstVehicle.getColor());
+            assertNotNull(firstVehicle.getRegistrationNumber());
+            assertNotNull(firstVehicle.isAvailable());
+            assertNotNull(firstVehicle.getDailyRate());
+
+        } catch (Exception e) {
+            fail("Exception thrown: " + e.getMessage()); // Fail the test if an exception occurs
+        }
     }
 }

@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Admin {
+
+    // Fields
     private int adminID;
     private String firstName;
     private String lastName;

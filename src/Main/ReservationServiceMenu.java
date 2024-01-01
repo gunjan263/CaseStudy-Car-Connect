@@ -124,6 +124,7 @@ public class ReservationServiceMenu {
             return java.sql.Date.valueOf(localDate);
         }
     }
+
     private static void updateReservation() {
         try {
             System.out.print("Enter Reservation ID to update: ");
@@ -152,7 +153,8 @@ public class ReservationServiceMenu {
             // Update the reservation
             reservationService.updateReservation(existingReservation);
             System.out.println("Reservation updated successfully!");
-        } catch (DateTimeParseException | InputMismatchException | DatabaseConnectionException | ReservationException e) {
+        } catch (DateTimeParseException | InputMismatchException | DatabaseConnectionException |
+                 ReservationException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -169,10 +171,5 @@ public class ReservationServiceMenu {
         } catch (InputMismatchException | DatabaseConnectionException | ReservationException e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
-
-
-            public static void main(String[] args) {
-        showReservationServiceMenu(scanner);
     }
 }
