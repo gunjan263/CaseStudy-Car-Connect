@@ -118,10 +118,7 @@ public class AdminServiceMenu {
             joiningDate = new java.util.Date();
         }
 
-
-//        LocalDate joinDate = LocalDate.now();
-//        // Create an Admin object with the obtained details
-       Admin admin = new Admin(firstName, lastName, email, phoneNumber, username, password, role, joiningDate);
+        Admin admin = new Admin(firstName, lastName, email, phoneNumber, username, password, role, joiningDate);
 
 
         try {
@@ -133,6 +130,7 @@ public class AdminServiceMenu {
             scanner.close();
         }
     }
+
     private static void updateAdmin() {
         Scanner scanner = new Scanner(System.in);
 
@@ -191,7 +189,6 @@ public class AdminServiceMenu {
     }
 
 
-
     private static void deleteAdmin() {
         Scanner scanner = new Scanner(System.in);
 
@@ -207,10 +204,5 @@ public class AdminServiceMenu {
         } finally {
             scanner.close();
         }
-    }
-
-
-    public static void main(String[] args) {
-        showAdminServiceMenu(scanner);
     }
 }

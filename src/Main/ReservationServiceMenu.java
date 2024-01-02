@@ -15,7 +15,7 @@ public class ReservationServiceMenu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final ReservationService reservationService = new ReservationService();
 
-    public static void showReservationServiceMenu(Scanner scanner) {
+    public static void showReservationServiceMenu() {
         boolean exit = false;
         while (!exit) {
             System.out.println("\nReservation Service Menu");

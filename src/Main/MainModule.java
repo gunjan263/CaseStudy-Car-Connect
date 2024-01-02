@@ -138,7 +138,7 @@ public class MainModule {
                 VehicleServiceMenu.showVehicleServiceMenu(scanner, true);
                 break;
             case 2:
-                ReservationServiceMenu.showReservationServiceMenu(scanner);
+                ReservationServiceMenu.showReservationServiceMenu();
                 break;
             default:
                 System.out.println("Invalid choice!");
@@ -164,7 +164,7 @@ public class MainModule {
                 VehicleServiceMenu.showVehicleServiceMenu(scanner, false);
                 break;
             case 3:
-                ReservationServiceMenu.showReservationServiceMenu(scanner);
+                ReservationServiceMenu.showReservationServiceMenu();
                 break;
             case 4:
                 AdminServiceMenu.showAdminServiceMenu(scanner);

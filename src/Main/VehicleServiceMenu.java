@@ -1,14 +1,9 @@
 package Main;
 
 import Dao.VehicleService;
-import Entity.Customer;
 import Entity.Vehicle;
 import Exception.DatabaseConnectionException;
 import Exception.VehicleNotFoundException;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
