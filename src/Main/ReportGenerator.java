@@ -24,11 +24,6 @@ public class ReportGenerator {
 
         reservationHistoryReport();
 
-        // Ask the user to input the start date for the vehicle utilization report
-        System.out.print("Enter start date for Vehicle Utilization Report (yyyy-MM-dd HH:mm:ss): ");
-        String startDateStr = scanner.nextLine();
-        vehicleUtilizationCalculatorReport(startDateStr);
-
         // Generate and display the revenue report
         revenueCalculatorReport();
     }
@@ -40,7 +35,7 @@ public class ReportGenerator {
             try (PreparedStatement statement = connection.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
 
-                // Display header or relevant details for reservation history
+                // Display header
                 System.out.println("Reservation History:");
 
                 // Display each reservation record
@@ -49,7 +44,7 @@ public class ReportGenerator {
                     int customerID = resultSet.getInt("CustomerID");
                     int vehicleID = resultSet.getInt("VehicleID");
 
-                    // Display or process the retrieved reservation details
+                    // Display
                     System.out.println("Reservation ID: " + reservationID);
                     System.out.println("Customer ID: " + customerID);
                     System.out.println("Vehicle ID: " + vehicleID);
@@ -60,48 +55,6 @@ public class ReportGenerator {
         }
     }
 
-    public void vehicleUtilizationCalculatorReport(String startDateStr) {
-        try (Connection connection = DBConnUtil.getConnection()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date startDate = dateFormat.parse(startDateStr);
-            Date currentDate = new Date(); // Get current date and time
-
-            // Fetch reservation information from the start date to the current date
-            Map<Integer, Long> vehicleUsageMap = new HashMap<>();
-
-            String sql = "SELECT VehicleID, StartDate, EndDate FROM Reservation WHERE StartDate >= ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setTimestamp(1, new Timestamp(startDate.getTime()));
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        int vehicleID = resultSet.getInt("VehicleID");
-                        Timestamp dbStartDate = resultSet.getTimestamp("StartDate");
-                        Timestamp dbEndDate = resultSet.getTimestamp("EndDate");
-
-                        // Calculate usage time for each reservation from the start date to the current date
-                        long overlapStart = Math.max(startDate.getTime(), dbStartDate.getTime());
-                        long overlapEnd = Math.min(currentDate.getTime(), (dbEndDate != null ? dbEndDate.getTime() : currentDate.getTime()));
-                        long usageTime = Math.max(0, overlapEnd - overlapStart);
-
-                        vehicleUsageMap.put(vehicleID, vehicleUsageMap.getOrDefault(vehicleID, 0L) + usageTime);
-                    }
-                }
-            }
-            System.out.println("Vehicle Utilization Report:");
-            for (Map.Entry<Integer, Long> entry : vehicleUsageMap.entrySet()) {
-                int vehicleID = entry.getKey();
-                long totalUsageTime = entry.getValue();
-
-                long hours = TimeUnit.MILLISECONDS.toHours(totalUsageTime);
-                long minutes = TimeUnit.MILLISECONDS.toMinutes(totalUsageTime - TimeUnit.HOURS.toMillis(hours));
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(totalUsageTime - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes));
-
-                System.out.println("Vehicle ID: " + vehicleID + " - Total Usage: " + hours + "h " + minutes + "m " + seconds + "s");
-            }
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void revenueCalculatorReport() {
         try (Connection connection = DBConnUtil.getConnection()) {
@@ -109,7 +62,7 @@ public class ReportGenerator {
             double totalRevenue = calculateTotalRevenueFromDB(connection);
 
             // Output the calculated total revenue
-            System.out.println("Total Revenue from Database: $" + totalRevenue);
+            System.out.println("Total Revenue from Database: Rs." + totalRevenue);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
 package Entity;
 import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 
 public class Admin {
 
@@ -40,10 +40,6 @@ public class Admin {
     // Getters and Setters for all fields
     public int getAdminID() {
         return adminID;
-    }
-
-    public void setAdminID(int adminID) {
-        this.adminID = adminID;
     }
 
     public String getFirstName() {
