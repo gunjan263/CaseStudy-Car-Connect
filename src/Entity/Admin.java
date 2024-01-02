@@ -104,7 +104,6 @@ public class Admin {
     public void setJoinDate(Date joinDate) {
         this.joinDate = joinDate;
     }
-
     // Debugging information
     @Override
     public String toString() {

@@ -62,7 +62,16 @@ public class AdminService implements IAdminService {
                 statement.setString(5, adminData.getUsername());
                 statement.setString(6, adminData.getPassword());
                 statement.setString(7, adminData.getRole());
-                statement.setDate(8, new java.sql.Date(adminData.getJoinDate().getTime()));
+//                statement.setDate(8, new java.sql.Date(adminData.getJoinDate().getTime()));
+                // Check if JoinDate is not null before accessing its time
+                // Check if JoinDate is not null before accessing its time
+                if (adminData.getJoinDate() != null) {
+                    statement.setDate(8, new java.sql.Date(adminData.getJoinDate().getTime()));
+                } else {
+                    // Throw an IllegalArgumentException if JoinDate is null
+                    throw new IllegalArgumentException("JoinDate cannot be null");
+                }
+
                 statement.executeUpdate();
             }
         } catch (SQLException e) {

@@ -1,5 +1,5 @@
 package Main;
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -83,7 +83,7 @@ public class AdminServiceMenu {
     }
 
     private static void registerAdmin() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter first name: ");
         String firstName = scanner.nextLine();
@@ -110,12 +110,12 @@ public class AdminServiceMenu {
         String joinDate = scanner.nextLine();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        java.util.Date joiningDate;
+        Date joiningDate;
         try {
             joiningDate = dateFormat.parse(joinDate);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Using current date instead.");
-            joiningDate = new java.util.Date();
+            joiningDate = new Date();
         }
 
         Admin admin = new Admin(firstName, lastName, email, phoneNumber, username, password, role, joiningDate);
