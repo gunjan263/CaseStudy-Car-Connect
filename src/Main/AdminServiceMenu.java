@@ -15,7 +15,7 @@ public class AdminServiceMenu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final AdminService adminService = new AdminService();
 
-    public static void showAdminServiceMenu(Scanner scanner) {
+    public static void showAdminServiceMenu() {
         boolean exit = false;
         while (!exit) {
             System.out.println("\nAdmin Service Menu");

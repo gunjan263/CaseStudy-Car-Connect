@@ -167,7 +167,7 @@ public class MainModule {
                 ReservationServiceMenu.showReservationServiceMenu();
                 break;
             case 4:
-                AdminServiceMenu.showAdminServiceMenu(scanner);
+                AdminServiceMenu.showAdminServiceMenu();
                 break;
             case 5:
                 generateReport();

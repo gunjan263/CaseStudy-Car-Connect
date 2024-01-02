@@ -9,16 +9,14 @@ import java.util.Scanner;
 
 public class VehicleServiceMenu {
     private static final VehicleService vehicleService = new VehicleService();
-    private static boolean isCustomer;
 
     public static void showVehicleServiceMenu(Scanner scanner, boolean customerAccess) {
-        isCustomer = customerAccess;
 
         System.out.println("Vehicle Service Menu");
         System.out.println("1. Get Available Vehicles");
         System.out.println("2. Get All Vehicles");
 
-        if (!isCustomer) {
+        if (!customerAccess) {
             System.out.println("3. Get Vehicle by ID");
             System.out.println("4. Add Vehicle");
             System.out.println("5. Update Vehicle");
@@ -37,28 +35,28 @@ public class VehicleServiceMenu {
                 getAllVehicles();
                 break;
             case 3:
-                if (!isCustomer) {
+                if (!customerAccess) {
                     getVehicleById(scanner);
                 } else {
                     System.out.println("Invalid choice!");
                 }
                 break;
             case 4:
-                if (!isCustomer) {
+                if (!customerAccess) {
                     addVehicle(scanner);
                 } else {
                     System.out.println("Invalid choice!");
                 }
                 break;
             case 5:
-                if (!isCustomer) {
+                if (!customerAccess) {
                     updateVehicle(scanner);
                 } else {
                     System.out.println("Invalid choice!");
                 }
                 break;
             case 6:
-                if (!isCustomer) {
+                if (!customerAccess) {
                     removeVehicle(scanner);
                 } else {
                     System.out.println("Invalid choice!");
