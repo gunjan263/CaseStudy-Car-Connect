@@ -24,13 +24,13 @@ public class VehicleServiceTest {
     public void testAddVehicle() {
         try {
             Vehicle newVehicle = new Vehicle(); // Create a new Vehicle object
-            newVehicle.setModel("Model XYZ");
-            newVehicle.setMake("Tesla");
-            newVehicle.setYear(2023);
-            newVehicle.setColor("Blue");
-            newVehicle.setRegistrationNumber("ABC1234");
+            newVehicle.setModel("Camaro");
+            newVehicle.setMake("Chevrolet");
+            newVehicle.setYear(2024);
+            newVehicle.setColor("White");
+            newVehicle.setRegistrationNumber("EX345");
             newVehicle.setAvailable(true);
-            newVehicle.setDailyRate(50.0);
+            newVehicle.setDailyRate(25000);
 
             vehicleService.addVehicle(newVehicle);
 

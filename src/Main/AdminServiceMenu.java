@@ -1,5 +1,7 @@
 package Main;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -103,9 +105,24 @@ public class AdminServiceMenu {
 
         System.out.println("Enter role: ");
         String role = scanner.nextLine();
-        LocalDate joinDate = LocalDate.now();
-        // Create an Admin object with the obtained details
-        Admin admin = new Admin(firstName, lastName, email, phoneNumber, username, password, role, joinDate);
+
+        System.out.println("Enter Join Date (dd-MM-yyyy):");
+        String joinDate = scanner.nextLine();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date joiningDate;
+        try {
+            joiningDate = dateFormat.parse(joinDate);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Using current date instead.");
+            joiningDate = new java.util.Date();
+        }
+
+
+//        LocalDate joinDate = LocalDate.now();
+//        // Create an Admin object with the obtained details
+       Admin admin = new Admin(firstName, lastName, email, phoneNumber, username, password, role, joiningDate);
+
 
         try {
             adminService.registerAdmin(admin);

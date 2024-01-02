@@ -82,7 +82,7 @@ public class AdminService implements IAdminService {
                 statement.setString(5, adminData.getUsername());
                 statement.setString(6, adminData.getPassword());
                 statement.setString(7, adminData.getRole());
-                statement.setDate(8, new java.sql.Date(adminData.getJoinDate().getTime()));
+                statement.setDate(8, new java.sql.Date(adminData.getJoinDate().getTime())) ;
                 statement.setInt(9, adminData.getAdminID());
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated == 0) {

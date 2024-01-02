@@ -12,7 +12,6 @@ public class AuthenticationHandler {
     public static final int MAX_ATTEMPTS = 3;
 
 
-
     public static boolean authenticateCustomer(String username, String password) {
         boolean isAuthenticated = false;
 

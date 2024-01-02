@@ -1,6 +1,5 @@
 package Entity;
-import java.time.LocalDate;
-import java.sql.Date;
+import java.util.Date;
 
 public class Admin {
 
@@ -34,7 +33,7 @@ public class Admin {
         this.joinDate = joinDate;
     }
 
-    public Admin(String firstName, String lastName, String email, String phoneNumber, String username, String password, String role, LocalDate joinDate) {
+    public Admin(String firstName, String lastName, String email, String phoneNumber, String username, String password, String role, Date joinDate) {
     }
 
     // Getters and Setters for all fields

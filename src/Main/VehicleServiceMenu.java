@@ -131,6 +131,7 @@ public class VehicleServiceMenu {
 
             // Create a new Vehicle object
             Vehicle newVehicle = new Vehicle(0, model, make, year, color, registrationNumber, availability, dailyRate);
+            vehicleService.addVehicle(newVehicle);
 
             System.out.println("Vehicle added successfully.");
         } catch (NumberFormatException e) {

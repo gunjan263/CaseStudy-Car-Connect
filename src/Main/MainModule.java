@@ -6,7 +6,7 @@ public class MainModule {
     private static boolean isAuthenticated = false;
     private static String currentUserType = "";
     public static void main(String[] args) {
-        String username_g = "";
+
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
