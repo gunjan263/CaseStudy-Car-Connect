@@ -6,14 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 
 public class ReportGenerator {
     private static final Scanner scanner = new Scanner(System.in);
